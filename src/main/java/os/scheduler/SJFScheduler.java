@@ -1,8 +1,8 @@
-﻿package os.scheduler;
+﻿package main.java.os.scheduler;
 
-import os.model.Process;
 import java.util.List;
 import java.util.PriorityQueue;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

@@ -1,8 +1,8 @@
-﻿package os.scheduler.acs;
+﻿package main.java.os.scheduler.acs;
 
-import os.model.Process;
 import java.util.List;
 import java.util.Queue;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

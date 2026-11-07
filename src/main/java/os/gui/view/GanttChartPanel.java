@@ -1,6 +1,6 @@
-﻿package os.gui.view;
+﻿package main.java.os.gui.view;
 
-import os.model.Process;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

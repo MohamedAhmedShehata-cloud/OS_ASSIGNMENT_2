@@ -1,10 +1,10 @@
-﻿package os.engine;
+﻿package main.java.os.engine;
 
-import os.scheduler.SchedulingStrategy;
-import os.model.Process;
-import os.observer.SimulationObserver;
-import os.input.TestCase;
 import java.util.List;
+import main.java.os.model.Process;
+import main.java.os.scheduler.SchedulingStrategy;
+import main.java.os.observer.SimulationObserver;
+import main.java.os.input.TestCase;
 
 /**
  * ============================================================================

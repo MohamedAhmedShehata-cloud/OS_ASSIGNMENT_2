@@ -1,9 +1,9 @@
-﻿package os.gui.controller;
+﻿package main.java.os.gui.controller;
 
-import os.observer.SimulationObserver;
-import os.model.Process;
-import os.metrics.SystemMetricsReport;
 import java.util.List;
+import main.java.os.model.Process;
+import main.java.os.observer.SimulationObserver;
+import main.java.os.metrics.SystemMetricsReport;
 
 /**
  * ============================================================================

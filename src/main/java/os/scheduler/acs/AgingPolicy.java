@@ -1,6 +1,6 @@
-﻿package os.scheduler.acs;
+﻿package main.java.os.scheduler.acs;
 
-import os.model.Process;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

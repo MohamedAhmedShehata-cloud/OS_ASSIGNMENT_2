@@ -1,8 +1,8 @@
-﻿package os.scheduler.acs;
+﻿package main.java.os.scheduler.acs;
 
-import os.scheduler.SchedulingStrategy;
-import os.model.Process;
 import java.util.List;
+import main.java.os.scheduler.SchedulingStrategy;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

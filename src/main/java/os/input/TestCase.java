@@ -1,7 +1,7 @@
-﻿package os.input;
+﻿package main.java.os.input;
 
-import os.model.Process;
 import java.util.List;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

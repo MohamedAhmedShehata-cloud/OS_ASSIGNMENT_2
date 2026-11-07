@@ -1,8 +1,8 @@
-﻿package os.observer;
+﻿package main.java.os.observer;
 
-import os.model.Process;
-import os.metrics.SystemMetricsReport;
 import java.util.List;
+import main.java.os.model.Process;
+import main.java.os.metrics.SystemMetricsReport;
 
 /**
  * ============================================================================

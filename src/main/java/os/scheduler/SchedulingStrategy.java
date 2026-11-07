@@ -1,7 +1,7 @@
-﻿package os.scheduler;
+﻿package main.java.os.scheduler;
 
-import os.model.Process;
 import java.util.List;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================

@@ -1,6 +1,6 @@
-﻿package os.engine;
+﻿package main.java.os.engine;
 
-import os.model.Process;
+import main.java.os.model.Process;
 
 /**
  * ============================================================================
