@@ -1,5 +1,6 @@
 ﻿package main.java.os.gui;
 
+
 /**
  * ============================================================================
  * OWNER: Omar Osama (GUI & Visualization Specialist)
@@ -12,6 +13,7 @@ public class SimulatorApp {
      *
      * @param args application launch arguments
      */
+
     public static void launchGui(String[] args) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
