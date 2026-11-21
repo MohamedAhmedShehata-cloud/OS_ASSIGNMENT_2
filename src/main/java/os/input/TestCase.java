@@ -1,4 +1,4 @@
-﻿package main.java.os.input;
+package main.java.os.input;
 
 import java.util.List;
 import main.java.os.model.Process;

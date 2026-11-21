@@ -1,4 +1,4 @@
-﻿package main.java.os.scheduler;
+package main.java.os.scheduler;
 
 import java.util.List;
 import main.java.os.model.Process;

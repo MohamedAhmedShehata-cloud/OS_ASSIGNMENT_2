@@ -1,4 +1,4 @@
-﻿package main.java.os.engine;
+package main.java.os.engine;
 
 /**
  * ============================================================================
@@ -13,14 +13,14 @@ public class SimulationClock {
      * Initializes simulation clock starting at tick 0.
      */
     public SimulationClock() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.currentTime = 0;
     }
 
     /**
      * Advances simulation clock forward by one tick.
      */
     public void tick() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.currentTime++;
     }
 
     /**
@@ -29,13 +29,13 @@ public class SimulationClock {
      * @return current clock tick
      */
     public int getCurrentTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return this.currentTime;
     }
 
     /**
      * Resets the clock back to tick 0.
      */
     public void reset() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.currentTime = 0;
     }
 }

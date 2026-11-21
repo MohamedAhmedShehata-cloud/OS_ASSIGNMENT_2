@@ -1,4 +1,4 @@
-﻿package main.java.os.observer;
+package main.java.os.observer;
 
 import java.util.List;
 import main.java.os.model.Process;

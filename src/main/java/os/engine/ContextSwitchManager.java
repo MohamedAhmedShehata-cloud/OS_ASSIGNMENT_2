@@ -1,4 +1,4 @@
-﻿package main.java.os.engine;
+package main.java.os.engine;
 
 import main.java.os.model.Process;
 
@@ -20,7 +20,10 @@ public class ContextSwitchManager {
      * @param switchDuration overhead ticks required to switch CPU context
      */
     public ContextSwitchManager(int switchDuration) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.switchDuration = Math.max(0, switchDuration);
+        this.remainingSwitchTicks = 0;
+        this.outgoingProcess = null;
+        this.incomingProcess = null;
     }
 
     /**
@@ -31,7 +34,13 @@ public class ContextSwitchManager {
      * @return true if context switch is required, false otherwise
      */
     public boolean isSwitchRequired(Process outgoing, Process incoming) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (switchDuration <= 0) {
+            return false;
+        }
+        if (outgoing == null || incoming == null) {
+            return false;
+        }
+        return !outgoing.getId().equals(incoming.getId());
     }
 
     /**
@@ -41,14 +50,18 @@ public class ContextSwitchManager {
      * @param incoming process to be loaded next
      */
     public void startSwitch(Process outgoing, Process incoming) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.outgoingProcess = outgoing;
+        this.incomingProcess = incoming;
+        this.remainingSwitchTicks = this.switchDuration;
     }
 
     /**
      * Decrements remaining context switch overhead ticks by one.
      */
     public void tick() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (remainingSwitchTicks > 0) {
+            remainingSwitchTicks--;
+        }
     }
 
     /**
@@ -57,7 +70,7 @@ public class ContextSwitchManager {
      * @return true if context switch is active, false otherwise
      */
     public boolean isSwitching() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return remainingSwitchTicks > 0;
     }
 
     /**
@@ -66,7 +79,7 @@ public class ContextSwitchManager {
      * @return incoming Process
      */
     public Process getIncomingProcess() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return incomingProcess;
     }
 
     /**
@@ -75,7 +88,7 @@ public class ContextSwitchManager {
      * @return outgoing Process
      */
     public Process getOutgoingProcess() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return outgoingProcess;
     }
 
     /**
@@ -84,6 +97,6 @@ public class ContextSwitchManager {
      * @return context switch duration in ticks
      */
     public int getSwitchDuration() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return switchDuration;
     }
 }

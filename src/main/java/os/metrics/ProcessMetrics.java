@@ -1,4 +1,4 @@
-﻿package main.java.os.metrics;
+package main.java.os.metrics;
 
 /**
  * ============================================================================

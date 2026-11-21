@@ -1,4 +1,4 @@
-﻿package main.java.os.gui.controller;
+package main.java.os.gui.controller;
 
 import java.util.List;
 import main.java.os.model.Process;

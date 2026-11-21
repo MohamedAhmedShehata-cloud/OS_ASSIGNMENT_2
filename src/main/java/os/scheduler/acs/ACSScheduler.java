@@ -1,4 +1,4 @@
-﻿package main.java.os.scheduler.acs;
+package main.java.os.scheduler.acs;
 
 import java.util.List;
 import main.java.os.scheduler.SchedulingStrategy;

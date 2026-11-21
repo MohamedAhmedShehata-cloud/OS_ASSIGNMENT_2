@@ -1,4 +1,4 @@
-﻿package main.java.os.gui.view;
+package main.java.os.gui.view;
 
 import main.java.os.model.Process;
 

@@ -1,8 +1,13 @@
-﻿package main.java.os.scheduler;
+package main.java.os.scheduler;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import main.java.os.model.Process;
+import main.java.os.model.ProcessState;
+import main.java.os.model.SchedulerTier;
 
 /**
  * ============================================================================
@@ -11,13 +16,17 @@ import main.java.os.model.Process;
  * ============================================================================
  */
 public class SJFScheduler implements SchedulingStrategy {
-    private PriorityQueue<Process> readyQueue;
+    private final PriorityQueue<Process> readyQueue;
+    private final Comparator<Process> comparator;
 
     /**
      * Constructs a preemptive Shortest-Job First (SRTF) scheduler.
      */
     public SJFScheduler() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.comparator = Comparator.comparingInt(Process::getRemainingTime)
+                .thenComparingInt(Process::getArrivalTime)
+                .thenComparing(Process::getId);
+        this.readyQueue = new PriorityQueue<>(comparator);
     }
 
     /**
@@ -25,7 +34,11 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public void addProcess(Process p, int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (p != null) {
+            p.setState(ProcessState.READY);
+            p.setCurrentTier(SchedulerTier.NONE);
+            readyQueue.offer(p);
+        }
     }
 
     /**
@@ -33,7 +46,7 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public Process selectNextProcess(int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return readyQueue.poll();
     }
 
     /**
@@ -41,7 +54,7 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public void onTick(int currentTime, Process currentlyRunning) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        // Preemptive SJF does not require quantum slice tracking.
     }
 
     /**
@@ -49,7 +62,14 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public boolean shouldPreempt(Process currentlyRunning, int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (currentlyRunning == null || currentlyRunning.isCompleted()) {
+            return false;
+        }
+        if (readyQueue.isEmpty()) {
+            return false;
+        }
+        Process candidate = readyQueue.peek();
+        return candidate.getRemainingTime() < currentlyRunning.getRemainingTime();
     }
 
     /**
@@ -57,7 +77,9 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public List<Process> getTier1Queue() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<Process> snapshot = new ArrayList<>(readyQueue);
+        snapshot.sort(comparator);
+        return Collections.unmodifiableList(snapshot);
     }
 
     /**
@@ -65,7 +87,7 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public List<Process> getTier2Queue() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return Collections.emptyList();
     }
 
     /**
@@ -73,6 +95,6 @@ public class SJFScheduler implements SchedulingStrategy {
      */
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return "Preemptive Shortest-Job First (SJF/SRTF)";
     }
 }

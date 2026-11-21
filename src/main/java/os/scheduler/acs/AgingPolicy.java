@@ -1,4 +1,4 @@
-﻿package main.java.os.scheduler.acs;
+package main.java.os.scheduler.acs;
 
 import main.java.os.model.Process;
 
