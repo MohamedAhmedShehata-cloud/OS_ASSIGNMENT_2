@@ -33,7 +33,31 @@ public class Process {
      * @param initialPriority base priority assigned to the process
      */
     public Process(String id, int arrivalTime, int burstTime, int initialPriority) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if(id==null|| id.isBlank())
+        {
+             throw new IllegalArgumentException("ID cannot be null or empty");
+        }
+       
+        if(arrivalTime<0)
+        { 
+            throw new IllegalArgumentException("Arrival time cannot be less than 0");
+        }
+        
+        if(burstTime<=0)
+        {
+           throw new IllegalArgumentException("Burst time must be greater than 0");
+        }
+
+        this.id=id; 
+        this.arrivalTime=arrivalTime;
+        this.burstTime=burstTime;
+        this.initialPriority=initialPriority;
+
+        this.remainingTime = burstTime;
+        this.effectivePriority = initialPriority;
+        this.currentTier= SchedulerTier.NONE;
+        this.state=ProcessState.READY;
+    
     }
 
     /**
@@ -42,8 +66,20 @@ public class Process {
      * @param currentTime the current simulation clock tick
      */
     public void executeOneUnit(int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    if (isCompleted()) {
+        return;
     }
+
+    if (firstExecutionTime == -1) {
+        firstExecutionTime = currentTime;
+    }
+
+    remainingTime--;
+
+    if (isCompleted()) {
+        state = ProcessState.TERMINATED;
+    }
+}
 
     /**
      * Checks if the process has finished all of its required CPU burst time.
@@ -51,7 +87,8 @@ public class Process {
      * @return true if remaining time is zero, false otherwise
      */
     public boolean isCompleted() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return remainingTime==0;
+      
     }
 
     /**
@@ -60,7 +97,7 @@ public class Process {
      * @return the unique process ID string
      */
     public String getId() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return id;
     }
 
     /**
@@ -69,7 +106,7 @@ public class Process {
      * @return arrival time in clock ticks
      */
     public int getArrivalTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return arrivalTime;
     }
 
     /**
@@ -78,7 +115,7 @@ public class Process {
      * @return total burst time in clock ticks
      */
     public int getBurstTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return burstTime;
     }
 
     /**
@@ -87,7 +124,7 @@ public class Process {
      * @return initial priority value
      */
     public int getInitialPriority() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return initialPriority;
     }
 
     /**
@@ -96,7 +133,7 @@ public class Process {
      * @return remaining CPU time in clock ticks
      */
     public int getRemainingTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+       return remainingTime;
     }
 
     /**
@@ -105,8 +142,12 @@ public class Process {
      * @param remainingTime the updated remaining burst time
      */
     public void setRemainingTime(int remainingTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    if (remainingTime < 0 || remainingTime > burstTime) {
+        throw new IllegalArgumentException("Invalid remaining time");
     }
+
+    this.remainingTime = remainingTime;
+}
 
     /**
      * Retrieves the effective priority after applying aging policies.
@@ -114,7 +155,7 @@ public class Process {
      * @return current effective priority value
      */
     public int getEffectivePriority() {
-        throw new UnsupportedOperationException("Not implemented yet");
+      return effectivePriority;
     }
 
     /**
@@ -123,7 +164,7 @@ public class Process {
      * @param effectivePriority the updated effective priority
      */
     public void setEffectivePriority(int effectivePriority) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.effectivePriority=effectivePriority;
     }
 
     /**
@@ -132,7 +173,7 @@ public class Process {
      * @return current SchedulerTier
      */
     public SchedulerTier getCurrentTier() {
-        throw new UnsupportedOperationException("Not implemented yet");
+       return currentTier;
     }
 
     /**
@@ -141,7 +182,7 @@ public class Process {
      * @param currentTier the new scheduling tier
      */
     public void setCurrentTier(SchedulerTier currentTier) {
-        throw new UnsupportedOperationException("Not implemented yet");
+       this.currentTier=currentTier;
     }
 
     /**
@@ -150,7 +191,7 @@ public class Process {
      * @return current ProcessState
      */
     public ProcessState getState() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return state;
     }
 
     /**
@@ -159,7 +200,7 @@ public class Process {
      * @param state the new ProcessState
      */
     public void setState(ProcessState state) {
-        throw new UnsupportedOperationException("Not implemented yet");
+       this.state=state;
     }
 
     /**
@@ -168,7 +209,7 @@ public class Process {
      * @return first execution timestamp, or -1 if never executed yet
      */
     public int getFirstExecutionTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+       return firstExecutionTime;
     }
 
     /**
@@ -177,7 +218,7 @@ public class Process {
      * @return finish timestamp, or -1 if not yet finished
      */
     public int getFinishTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+       return finishTime;
     }
 
     /**
@@ -186,7 +227,7 @@ public class Process {
      * @param finishTime completion timestamp
      */
     public void setFinishTime(int finishTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+       this.finishTime=finishTime;
     }
 
     /**
@@ -195,7 +236,7 @@ public class Process {
      * @return timestamp of entry into Tier 2, or -1 if never demoted
      */
     public int getTier2ArrivalTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+      return tier2ArrivalTime;
     }
 
     /**
@@ -204,6 +245,6 @@ public class Process {
      * @param tier2ArrivalTime entry timestamp into Tier 2
      */
     public void setTier2ArrivalTime(int tier2ArrivalTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+       this.tier2ArrivalTime=tier2ArrivalTime;
     }
 }

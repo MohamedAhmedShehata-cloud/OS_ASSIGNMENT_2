@@ -17,7 +17,13 @@ public class ConsoleLogger implements SimulationObserver {
      */
     @Override
     public void onTick(int currentTime, Process runningProcess, List<Process> tier1Queue, List<Process> tier2Queue) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        System.out.println("Time:"+currentTime);
+        if(runningProcess==null)
+        {
+            System.out.println("CPU: Idle or Context Switching");
+        }else {System.out.println("Running:"+runningProcess.getId());}
+         System.out.println("Tier 1:"+tier1Queue);
+         System.out.println("Tier 2:"+tier2Queue);
     }
 
     /**
@@ -25,7 +31,12 @@ public class ConsoleLogger implements SimulationObserver {
      */
     @Override
     public void onContextSwitch(int currentTime, Process outgoing, Process incoming) {
-        throw new UnsupportedOperationException("Not implemented yet");
+       System.out.println("Time:"+currentTime);
+       
+    String from = (outgoing == null) ? "Idle" : outgoing.getId();
+    String to = (incoming == null) ? "Idle" : incoming.getId();
+
+    System.out.println("Context Switch: " + from + " --> " + to);
     }
 
     /**
@@ -33,7 +44,7 @@ public class ConsoleLogger implements SimulationObserver {
      */
     @Override
     public void onProcessFinished(int currentTime, Process p) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        System.out.println( "Time :" + currentTime + " Process: " + p.getId() + " completed");       
     }
 
     /**
@@ -41,6 +52,7 @@ public class ConsoleLogger implements SimulationObserver {
      */
     @Override
     public void onSimulationCompleted(SystemMetricsReport report) {
-        throw new UnsupportedOperationException("Not implemented yet");
+            System.out.println("\n===== SIMULATION COMPLETED =====");
+                       report.printSummaryTable();
     }
 }
