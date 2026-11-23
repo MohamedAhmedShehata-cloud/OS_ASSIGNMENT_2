@@ -19,14 +19,54 @@ public class SystemMetricsReport {
      * @param metricsList collection of completed process metrics
      */
     public SystemMetricsReport(List<ProcessMetrics> metricsList) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+    if (metricsList == null) {
+        throw new IllegalArgumentException("Metrics list cannot be null");
     }
+
+    this.metricsList = List.copyOf(metricsList);
+
+    if (this.metricsList.isEmpty()) {
+        this.averageTurnaroundTime = 0;
+        this.averageWaitingTime = 0;
+        return;
+    }
+
+    int totaltat = 0;
+    int totalwat = 0;
+
+    for (ProcessMetrics metric : this.metricsList) {
+        totaltat += metric.turnaroundTime();
+        totalwat += metric.waitingTime();
+    }
+
+    this.averageTurnaroundTime =
+            (double) totaltat / this.metricsList.size();
+
+    this.averageWaitingTime =
+            (double) totalwat / this.metricsList.size();
+}
 
     /**
      * Prints the structured summary metrics table for all processes along with average TAT and WT.
      */
     public void printSummaryTable() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        System.out.println("process id || arrivalTime || finishTime||turnaroundTime|| waitingTime|| responseTime ");
+
+
+    for (ProcessMetrics metric : metricsList) {
+
+        System.out.println(
+            metric.processId() + " | " +
+            metric.arrivalTime() + " | " +
+            metric.finishTime() + " | " +
+            metric.turnaroundTime() + " | " +
+            metric.waitingTime() + " | " +
+            metric.responseTime()
+        );
+    }
+      System.out.println("Average Tat: " + averageTurnaroundTime);
+      System.out.println("Average Wt: " + averageWaitingTime);
     }
 
     /**
@@ -35,7 +75,7 @@ public class SystemMetricsReport {
      * @return average turnaround time
      */
     public double getAverageTurnaroundTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+       return averageTurnaroundTime;
     }
 
     /**
@@ -44,7 +84,7 @@ public class SystemMetricsReport {
      * @return average waiting time
      */
     public double getAverageWaitingTime() {
-        throw new UnsupportedOperationException("Not implemented yet");
+       return averageWaitingTime;
     }
 
     /**
@@ -53,6 +93,6 @@ public class SystemMetricsReport {
      * @return list of ProcessMetrics
      */
     public List<ProcessMetrics> getMetricsList() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+     return metricsList;
+    } 
 }
