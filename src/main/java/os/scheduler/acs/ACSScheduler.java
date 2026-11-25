@@ -18,6 +18,7 @@ public class ACSScheduler implements SchedulingStrategy {
     private Tier1Queue tier1;
     private Tier2Queue tier2;
     private boolean isProcessRunningNonPreemptively;
+    private boolean preemptionRequired;
 
     /**
      - Constructs an Adaptive Container Scheduler instance with specified Tier 1 quantum.
@@ -33,6 +34,7 @@ public class ACSScheduler implements SchedulingStrategy {
         tier1 = new Tier1Queue(timeQuantum);
         tier2 = new Tier2Queue();
         isProcessRunningNonPreemptively = false;
+        preemptionRequired = false;
     }
 
     /**
@@ -60,6 +62,7 @@ public class ACSScheduler implements SchedulingStrategy {
                 next.setCurrentTier(SchedulerTier.TIER_1);
                 tier1.resetQuantumUsage();
                 isProcessRunningNonPreemptively = false;
+                preemptionRequired = false;
             }
             return next;
         }
@@ -69,6 +72,7 @@ public class ACSScheduler implements SchedulingStrategy {
             if (next != null) {
                 next.setCurrentTier(SchedulerTier.TIER_2);
                 isProcessRunningNonPreemptively = true;
+                preemptionRequired = false;
             }
             return next;
         }
@@ -90,6 +94,7 @@ public class ACSScheduler implements SchedulingStrategy {
                 running.setState(ProcessState.READY);
                 tier2.enqueue(running, currentTime);
                 tier1.resetQuantumUsage();
+                preemptionRequired = true;
             }
         }
     }
@@ -100,6 +105,10 @@ public class ACSScheduler implements SchedulingStrategy {
     @Override
     public boolean shouldPreempt(Process currentlyRunning, int currentTime) {
         if (currentlyRunning == null || currentlyRunning.isCompleted()) {
+            return false;
+        }
+        if (preemptionRequired) {
+            preemptionRequired = false;
             return true;
         }
         if (isProcessRunningNonPreemptively || currentlyRunning.getCurrentTier() == SchedulerTier.TIER_2) {

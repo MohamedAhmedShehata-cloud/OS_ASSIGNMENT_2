@@ -80,6 +80,15 @@ public class SimulationEngine {
                     if (currentlyRunning.isCompleted()) {
                         currentlyRunning.setFinishTime(currentTime + 1);
                         currentlyRunning = null;
+                    } else if (strategy.shouldPreempt(currentlyRunning, currentTime)) {
+                        Process preemptedProcess = currentlyRunning;
+                        Process next = strategy.selectNextProcess(currentTime);
+                        if (csManager.isSwitchRequired(preemptedProcess, next)) {
+                            csManager.startSwitch(preemptedProcess, next);
+                            currentlyRunning = null;
+                        } else {
+                            currentlyRunning = next;
+                        }
                     }
                 }
             }
