@@ -1,5 +1,7 @@
 package main.java.os.scheduler.acs;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import main.java.os.model.Process;
@@ -12,12 +14,14 @@ import main.java.os.model.Process;
  */
 public class Tier2Queue {
     private PriorityQueue<Process> queue;
-
+    private static final Comparator<Process> ORDER = Comparator
+            .comparingInt(Process::getEffectivePriority)
+            .thenComparingInt(Process::getArrivalTime);
     /**
      * Constructs a Tier 2 priority queue ordered by effective priority then arrival time.
      */
     public Tier2Queue() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        queue = new PriorityQueue<>(ORDER);
     }
 
     /**
@@ -27,7 +31,8 @@ public class Tier2Queue {
      * @param currentTime timestamp of entry into Tier 2
      */
     public void enqueue(Process p, int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        p.setTier2ArrivalTime(currentTime);
+        queue.add(p);
     }
 
     /**
@@ -36,7 +41,7 @@ public class Tier2Queue {
      * @return highest priority process, or null if empty
      */
     public Process dequeue() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.isEmpty() ? null : queue.remove();
     }
 
     /**
@@ -45,7 +50,7 @@ public class Tier2Queue {
      * @return highest priority process, or null if empty
      */
     public Process peek() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.peek();
     }
 
     /**
@@ -54,7 +59,7 @@ public class Tier2Queue {
      * @return true if empty, false otherwise
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.isEmpty();
     }
 
     /**
@@ -63,7 +68,10 @@ public class Tier2Queue {
      * @return list of processes
      */
     public List<Process> asList() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<Process> list = new ArrayList<>(queue);
+        list.sort(ORDER);
+
+        return list;
     }
 
     /**
@@ -72,6 +80,12 @@ public class Tier2Queue {
      * @param currentTime current clock tick
      */
     public void refreshPriorities(int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        List<Process> processes = asList();
+
+        queue.clear();
+        for (Process p : processes) {
+            AgingPolicy.applyAging(p, currentTime);
+            queue.add(p);
+        }
     }
 }
