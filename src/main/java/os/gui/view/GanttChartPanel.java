@@ -20,6 +20,7 @@ public class GanttChartPanel extends VBox {
 
         setSpacing(12);
         setPadding(new Insets(15));
+        setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         Label title = new Label("Gantt Chart");
         title.setStyle(
@@ -49,9 +50,11 @@ public class GanttChartPanel extends VBox {
                 "-fx-background-color: transparent;"
         );
 
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
         getChildren().addAll(title, scrollPane);
         setStyle("-fx-background-color: #111827;");
-        
+
         showEmptyMessage();
     }
 
@@ -67,7 +70,7 @@ public class GanttChartPanel extends VBox {
 
         for (Segment segment : segments) {
 
-            int duration = segment.end - segment.start;
+            int duration = segment.getEnd() - segment.getStart();
 
             if (duration <= 0) {
                 continue;
@@ -81,7 +84,7 @@ public class GanttChartPanel extends VBox {
             block.setPrefWidth(blockWidth);
             block.setPrefHeight(65);
 
-            Label processLabel = new Label(segment.processId);
+            Label processLabel = new Label(segment.getProcessId());
             processLabel.setStyle(
                     "-fx-text-fill: white;" +
                     "-fx-font-size: 13px;" +
@@ -100,7 +103,7 @@ public class GanttChartPanel extends VBox {
             );
 
             block.setStyle(
-                    "-fx-background-color: " + getProcessColor(segment.processId) + ";" +
+                    "-fx-background-color: " + getProcessColor(segment.getProcessId()) + ";" +
                     "-fx-background-radius: 6;"
             );
 
@@ -110,7 +113,7 @@ public class GanttChartPanel extends VBox {
             timeMarker.setMinWidth(blockWidth);
             timeMarker.setPrefWidth(blockWidth);
 
-            Label startLabel = new Label(String.valueOf(segment.start));
+            Label startLabel = new Label(String.valueOf(segment.getStart()));
             startLabel.setStyle(
                     "-fx-text-fill: #94A3B8;" +
                     "-fx-font-size: 10px;"
@@ -120,18 +123,15 @@ public class GanttChartPanel extends VBox {
             timelineContainer.getChildren().add(timeMarker);
         }
 
-        if (!segments.isEmpty()) {
+        Segment lastSegment = segments.get(segments.size() - 1);
 
-            Segment lastSegment = segments.get(segments.size() - 1);
+        Label endLabel = new Label(String.valueOf(lastSegment.getEnd()));
+        endLabel.setStyle(
+                "-fx-text-fill: #94A3B8;" +
+                "-fx-font-size: 10px;"
+        );
 
-            Label endLabel = new Label(String.valueOf(lastSegment.end));
-            endLabel.setStyle(
-                    "-fx-text-fill: #94A3B8;" +
-                    "-fx-font-size: 10px;"
-            );
-
-            timelineContainer.getChildren().add(endLabel);
-        }
+        timelineContainer.getChildren().add(endLabel);
     }
 
     private void showEmptyMessage() {
@@ -174,6 +174,18 @@ public class GanttChartPanel extends VBox {
             this.processId = processId;
             this.start = start;
             this.end = end;
+        }
+
+        public String getProcessId() {
+            return processId;
+        }
+
+        public int getStart() {
+            return start;
+        }
+
+        public int getEnd() {
+            return end;
         }
     }
 }
