@@ -17,7 +17,7 @@ public class AgingPolicy {
      * @return aging priority boost units
      */
     public static int calculateAgingUnits(int waitTimeInTier2) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return (int)Math.floor(waitTimeInTier2 / 4.0);
     }
 
     /**
@@ -27,6 +27,9 @@ public class AgingPolicy {
      * @param currentTime current simulation timestamp
      */
     public static void applyAging(Process p, int currentTime) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        int waitTime = currentTime - p.getTier2ArrivalTime();
+        int agingUnits = calculateAgingUnits(waitTime);
+
+        p.setEffectivePriority(p.getInitialPriority() - agingUnits);
     }
 }

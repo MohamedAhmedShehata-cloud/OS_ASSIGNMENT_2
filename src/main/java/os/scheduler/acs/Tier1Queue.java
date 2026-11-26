@@ -1,5 +1,6 @@
 package main.java.os.scheduler.acs;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import main.java.os.model.Process;
@@ -21,7 +22,12 @@ public class Tier1Queue {
      * @param timeQuantum maximum consecutive ticks a process may execute in Tier 1
      */
     public Tier1Queue(int timeQuantum) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (timeQuantum <= 0)
+            throw new IllegalArgumentException();
+
+        queue = new LinkedList<>();
+        this.timeQuantum = timeQuantum;
+        currentQuantumUsed = 0;
     }
 
     /**
@@ -30,7 +36,7 @@ public class Tier1Queue {
      * @param p process to enqueue
      */
     public void enqueue(Process p) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        queue.add(p);
     }
 
     /**
@@ -39,7 +45,7 @@ public class Tier1Queue {
      * @return head process, or null if empty
      */
     public Process dequeue() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.isEmpty() ? null : queue.remove();
     }
 
     /**
@@ -48,7 +54,7 @@ public class Tier1Queue {
      * @return head process, or null if empty
      */
     public Process peek() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.isEmpty() ? null : queue.peek();
     }
 
     /**
@@ -57,7 +63,7 @@ public class Tier1Queue {
      * @return true if empty, false otherwise
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.isEmpty();
     }
 
     /**
@@ -66,21 +72,21 @@ public class Tier1Queue {
      * @return list of queued processes
      */
     public List<Process> asList() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return queue.stream().toList();
     }
 
     /**
      * Increments the quantum usage counter for the currently executing process.
      */
     public void incrementQuantumUsage() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        currentQuantumUsed++;
     }
 
     /**
      * Resets the quantum usage counter back to zero.
      */
     public void resetQuantumUsage() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        currentQuantumUsed = 0;
     }
 
     /**
@@ -89,7 +95,7 @@ public class Tier1Queue {
      * @return true if quantum usage >= timeQuantum, false otherwise
      */
     public boolean hasExpiredQuantum() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return currentQuantumUsed >= timeQuantum;
     }
 
     /**
@@ -98,6 +104,6 @@ public class Tier1Queue {
      * @return quantum ticks used so far
      */
     public int getCurrentQuantumUsed() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return currentQuantumUsed;
     }
 }

@@ -29,12 +29,12 @@ public class Main {
         // Execute Test Case 1 with both Preemptive SJF and ACS
         TestCase tc1 = TestCaseFactory.getTestCase1();
         runSimulation(new SJFScheduler(), tc1);
-        runSimulation(new ACSScheduler(tc1.timeQuantum()), tc1);
+        runSimulation(new ACSScheduler("Test case 1 Scheduler", tc1.timeQuantum()), tc1);
 
         // Execute Test Case 2 with both Preemptive SJF and ACS
         TestCase tc2 = TestCaseFactory.getTestCase2();
         runSimulation(new SJFScheduler(), tc2);
-        runSimulation(new ACSScheduler(tc2.timeQuantum()), tc2);
+        runSimulation(new ACSScheduler("Test case 2 Scheduler", tc2.timeQuantum()), tc2);
     }
 
     /**

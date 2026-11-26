@@ -1,5 +1,6 @@
 package main.java.os.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 import main.java.os.model.Process;
 import main.java.os.scheduler.SchedulingStrategy;
@@ -27,7 +28,12 @@ public class SimulationEngine {
      * @param testCase test case containing process specs and configuration
      */
     public SimulationEngine(SchedulingStrategy strategy, TestCase testCase) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        clock = new SimulationClock();
+
+        this.strategy = strategy;
+        csManager = new ContextSwitchManager(testCase.contextSwitchTime());
+        observers = new ArrayList<>();
+        incomingProcesses = testCase.processes();
     }
 
     /**
@@ -36,22 +42,77 @@ public class SimulationEngine {
      * @param observer simulation observer (logger, metrics collector, UI)
      */
     public void addObserver(SimulationObserver observer) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        observers.add(observer);
     }
 
     /**
      * Starts and executes the main simulation discrete-time event loop until completion.
      */
     public void run() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        while (!isCompleted()) {
+            int currentTime = clock.getCurrentTime();
+
+            for (Process p : incomingProcesses) {
+                if (p.getArrivalTime() == currentTime) {
+                    strategy.addProcess(p, currentTime);
+                }
+            }
+
+            if (csManager.isSwitching()) {
+                csManager.tick();
+                if (!csManager.isSwitching()) {
+                    currentlyRunning = csManager.getIncomingProcess();
+                }
+            } else {
+                if (currentlyRunning == null || strategy.shouldPreempt(currentlyRunning, currentTime)) {
+                    Process next = strategy.selectNextProcess(currentTime);
+                    if (csManager.isSwitchRequired(currentlyRunning, next)) {
+                        csManager.startSwitch(currentlyRunning, next);
+                        currentlyRunning = null;
+                    } else {
+                        currentlyRunning = next;
+                    }
+                }
+
+                if (currentlyRunning != null) {
+                    currentlyRunning.executeOneUnit(currentTime);
+                    strategy.onTick(currentTime, currentlyRunning);
+                    if (currentlyRunning.isCompleted()) {
+                        currentlyRunning.setFinishTime(currentTime + 1);
+                        currentlyRunning = null;
+                    } else if (strategy.shouldPreempt(currentlyRunning, currentTime)) {
+                        Process preemptedProcess = currentlyRunning;
+                        Process next = strategy.selectNextProcess(currentTime);
+                        if (csManager.isSwitchRequired(preemptedProcess, next)) {
+                            csManager.startSwitch(preemptedProcess, next);
+                            currentlyRunning = null;
+                        } else {
+                            currentlyRunning = next;
+                        }
+                    }
+                }
+            }
+
+            for (SimulationObserver observer : observers) {
+                observer.onTick(
+                        currentTime, currentlyRunning,
+                        strategy.getTier1Queue(), strategy.getTier2Queue()
+                );
+            }
+
+            clock.tick();
+        }
     }
 
     /**
-     * Checks if all processes have completed and no context switch or queue is pending.
-     *
-     * @return true if simulation is fully finished, false otherwise
+     - Checks if all processes have completed and no context switch or queue is pending.
+     - @return true if simulation is fully finished, false otherwise
      */
     public boolean isCompleted() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        for (Process p : incomingProcesses) {
+            if (!p.isCompleted())
+                return false;
+        }
+        return true;
     }
 }
